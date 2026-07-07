@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
     const data = await response.json();
     if (data.token) {
       setToken(data.token);
-      setLocation("DASHBOARD");
+      setLocation("TABLET");
     }
   };
 

@@ -1,5 +1,8 @@
+import { use } from "react";
+import  { useAuth  } from "./AuthContext"
 /** Users can only this component if they are authorized by the API. */
 export default function Tunnel() {
+  const {location} = useAuth();
   return (
     <section>
       <p>The tablet vibrates and a jadeite chime rings through the air.</p>
@@ -8,6 +11,7 @@ export default function Tunnel() {
         doors of the gate open.
       </p>
       <p>You step into the tunnel, and your journey continues.</p>
+      <p>Current location: {location}</p>
     </section>
   );
 }

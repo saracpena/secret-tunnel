@@ -38,18 +38,25 @@ export function AuthProvider({ children }) {
 
   // TODO: authenticate
   const authenticate = async () => {
-    if (!token) {
-      throw Error("No token found");
-    }
-    const response = await fetch(`${API}/authenticate`, {
-      method: "GET",
-      headers: { "Authorization": `Bearer ${token}` },
-    });
-    if (!response.ok){
-      throw Error("Authentication Failed");
-    }
-      setLocation("TUNNEL");
-  };
+  if (!token) {
+    throw Error("No token found");
+  }
+
+  const response = await fetch(`${API}/authenticate`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw Error("Authentication failed");
+  }
+
+  setLocation("TUNNEL");
+};
+
+console.log("token:", token);
+console.log("location:", location);
 
   const value = { location, signup, authenticate };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -60,3 +67,4 @@ export function useAuth() {
   if (!context) throw Error("useAuth must be used within an AuthProvider");
   return context;
 }
+

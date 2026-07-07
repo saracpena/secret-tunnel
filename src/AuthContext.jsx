@@ -20,13 +20,15 @@ export function AuthProvider({ children }) {
   const [location, setLocation] = useState("GATE");
 
   // TODO: signup
-  const signup = async (username, password) => {
+  const signup = async (username) => {
     const response = await fetch(`${API}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username }),
     });
+
     const data = await response.json();
+
     if (data.token) {
       setToken(data.token);
       setLocation("TABLET");
@@ -35,17 +37,18 @@ export function AuthProvider({ children }) {
 
 
   // TODO: authenticate
-  const authenticate = async (username, password) => {
-    const response = await fetch(`${API}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-    if (data.token) {
-      setToken(data.token);
-      setLocation("DASHBOARD");
+  const authenticate = async () => {
+    if (!token) {
+      throw Error("No token found");
     }
+    const response = await fetch(`${API}/authenticate`, {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` },
+    });
+    if (!response.ok){
+      throw Error("Authentication Failed");
+    }
+      setLocation("TUNNEL");
   };
 
   const value = { location, signup, authenticate };
